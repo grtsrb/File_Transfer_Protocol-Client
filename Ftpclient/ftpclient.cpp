@@ -1,5 +1,6 @@
 #include "ftpclient.h"
 
+
 FTPClient::FTPClient(QObject *parent)
     : QObject{parent}
 {
@@ -63,7 +64,7 @@ void FTPClient::download(const QString &file, int filetype)
     ftpSocket->write(retr);
     wait();
 
-    QString file_name = "C:/Users/milic/Desktop/ftptest/" + file;
+    QString file_name = "C:/Users/milic/Desktop/Client/" + file;
     QFile fileDownload(file_name);
     if(!fileDownload.open(QIODevice::ReadWrite))
     {
@@ -102,7 +103,7 @@ void FTPClient::upload(const QString &file, int filetype)
     default:
         break;
     }
-    // Set up new socket for data
+    // Set up new socket for data and send PASV
     ftpSocket->write("PASV\r\n");
     wait();
     dataSocket = new QTcpSocket(this);
@@ -112,7 +113,7 @@ void FTPClient::upload(const QString &file, int filetype)
         qDebug() << "Error. Failed to connect to data port.";
         return;
     }
-    QString file_name = "C:/Users/milic/Desktop/ftptest/" + file;
+    QString file_name = "C:/Users/milic/Desktop/Client/" + file;
     QByteArray stor = "STOR " + file.toLocal8Bit() + "\r\n";
     ftpSocket->write(stor);
     wait();
